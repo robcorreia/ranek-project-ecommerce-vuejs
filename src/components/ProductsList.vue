@@ -10,22 +10,36 @@
       <p class="price">{{ product.price }}</p>
       <p>{{ product.description }}</p>
     </div>
+    {{ url }}
   </section>
 </template>
 
 <script>
 import { api } from "@/service/index";
+import { serialize } from "@/helpers/index";
 
 export default {
   data() {
     return {
       products: null,
+      productsPerPage: 9,
     };
+  },
+  computed: {
+    url() {
+      const query = serialize(this.$route.query);
+      return `/product?_limit=${this.productsPerPage}${query}`;
+    },
   },
   methods: {
     async getProducts() {
-      const response = await api.get("/product");
+      const response = await api.get(this.url);
       this.products = response.data;
+    },
+  },
+  watch: {
+    url() {
+      this.getProducts();
     },
   },
   created() {
