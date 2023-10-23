@@ -1,30 +1,35 @@
 <template>
   <section class="products-container">
-    <div v-if="products && products.length" class="products">
-      <div
-        v-for="(product, index) in products"
-        :key="product.id + index"
-        class="product"
-      >
-        <router-link to="/">
-          <img
-            v-if="product.photos"
-            :src="product.photos[0].src"
-            :alt="product.photos[0].title"
-          />
-          <h2 class="title">{{ product.name }}</h2>
-          <p class="price">{{ product.price }}</p>
-          <p>{{ product.description }}</p>
-        </router-link>
+    <transition mode="out-in">
+      <div v-if="products && products.length" class="products" key="products">
+        <div
+          v-for="(product, index) in products"
+          :key="product.id + index"
+          class="product"
+        >
+          <router-link to="/">
+            <img
+              v-if="product.photos"
+              :src="product.photos[0].src"
+              :alt="product.photos[0].title"
+            />
+            <h2 class="title">{{ product.name }}</h2>
+            <p class="price">{{ product.price }}</p>
+            <p>{{ product.description }}</p>
+          </router-link>
+        </div>
+        <PagesProducts
+          :totalProducts="totalProducts"
+          :productsPerPage="productsPerPage"
+        />
       </div>
-      <PagesProducts
-        :totalProducts="totalProducts"
-        :productsPerPage="productsPerPage"
-      />
-    </div>
-    <div v-else-if="products && products.length === 0">
-      <p class="no-results">Busca sem resultados. Tente buscar outro termo.</p>
-    </div>
+      <div v-else-if="products && products.length === 0" key="no-results">
+        <p class="no-results">
+          Busca sem resultados. Tente buscar outro termo.
+        </p>
+      </div>
+      <LoadingPage v-else key="loading" />
+    </transition>
   </section>
 </template>
 
@@ -41,7 +46,7 @@ export default {
   data() {
     return {
       products: null,
-      productsPerPage: 3,
+      productsPerPage: 9,
       totalProducts: 0,
     };
   },
@@ -53,9 +58,12 @@ export default {
   },
   methods: {
     async getProducts() {
+      this.products = null;
       const response = await api.get(this.url);
-      this.totalProducts = Number(response.headers["x-total-count"]);
-      this.products = response.data;
+      window.setTimeout(() => {
+        this.totalProducts = Number(response.headers["x-total-count"]);
+        this.products = response.data;
+      }, 1500);
     },
   },
   watch: {
