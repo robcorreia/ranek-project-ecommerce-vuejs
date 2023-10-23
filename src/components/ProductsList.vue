@@ -7,7 +7,7 @@
           :key="product.id + index"
           class="product"
         >
-          <router-link to="/">
+          <router-link :to="{ name: 'product', params: { id: product.id } }">
             <img
               v-if="product.photos"
               :src="product.photos[0].src"

@@ -8,6 +8,18 @@ import LoadingPage from "./components/LoadingPage.vue";
 
 Vue.component("LoadingPage", LoadingPage);
 
+Vue.filter("priceFormat", (value) => {
+  value = Number(value);
+  if (!isNaN(value)) {
+    return value.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  } else {
+    return "";
+  }
+});
+
 new Vue({
   router,
   store,
