@@ -35,7 +35,10 @@ export default {
     };
   },
   methods: {
-    logIn() {},
+    logIn() {
+      this.$store.dispatch("getUser", this.login.email);
+      this.$router.push({ name: "user" });
+    },
   },
 };
 </script>
