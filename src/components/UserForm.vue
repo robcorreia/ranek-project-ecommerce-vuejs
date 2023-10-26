@@ -54,7 +54,6 @@ export default {
   methods: {
     async fillCep() {
       const cep = this.cep.replace(/\D/g, "");
-      console.log(cep);
       if (cep.length === 8) {
         const response = await getCep(cep);
         this.street = response.data.logradouro;

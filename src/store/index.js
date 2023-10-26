@@ -25,15 +25,19 @@ export default new Vuex.Store({
       state.login = payload;
     },
     UPDATE_USER(state, payload) {
-      state.usuario = Object.assign(state.user, payload);
+      state.user = Object.assign(state.user, payload);
     },
   },
   actions: {
     getUser(context, payload) {
-      api.get(`/user/${payload}`).then((response) => {
+      return api.get(`/user/${payload}`).then((response) => {
         context.commit("UPDATE_USER", response.data);
         context.commit("UPDATE_LOGIN", true);
       });
+    },
+    userCreate(context, payload) {
+      context.commit("UPDATE_USER", { id: payload.email });
+      return api.post("/user", payload);
     },
   },
 });
