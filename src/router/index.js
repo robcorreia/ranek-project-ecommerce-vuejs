@@ -4,6 +4,10 @@ import Home from "../views/Home.vue";
 import Product from "../views/Product.vue";
 import Login from "../views/Login.vue";
 import User from "../views/User/User.vue";
+import UserProducts from "../views/User/UserProducts.vue";
+import UserEdit from "../views/User/UserEdit.vue";
+import UserOrders from "../views/User/UserOrders.vue";
+import UserSales from "../views/User/UserSales.vue";
 
 Vue.use(VueRouter);
 
@@ -26,8 +30,29 @@ const routes = [
   },
   {
     path: "/user",
-    name: "user",
     component: User,
+    children: [
+      {
+        path: "",
+        name: "user",
+        component: UserProducts,
+      },
+      {
+        path: "edit",
+        name: "user-edit",
+        component: UserEdit,
+      },
+      {
+        path: "sales",
+        name: "sales",
+        component: UserSales,
+      },
+      {
+        path: "orders",
+        name: "orders",
+        component: UserOrders,
+      },
+    ],
   },
 ];
 
