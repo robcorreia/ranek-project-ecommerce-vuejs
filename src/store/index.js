@@ -19,6 +19,7 @@ export default new Vuex.Store({
       city: "",
       state: "",
     },
+    user_products: null,
   },
   mutations: {
     UPDATE_LOGIN(state, payload) {
@@ -27,8 +28,18 @@ export default new Vuex.Store({
     UPDATE_USER(state, payload) {
       state.user = Object.assign(state.user, payload);
     },
+    UPDATE_USER_PRODUCTS(state, payload) {
+      state.user_products = payload;
+    },
+    ADD_USER_PRODUCTS(state, payload) {
+      state.user_products.unshit(payload);
+    },
   },
   actions: {
+    async getUserProducts(context) {
+      const response = await api.get(`/product?${context.state.user.id}`);
+      context.commit("UPDATE_USER_PRODUCTS", response.data);
+    },
     getUser(context, payload) {
       return api.get(`/user/${payload}`).then((response) => {
         context.commit("UPDATE_USER", response.data);
