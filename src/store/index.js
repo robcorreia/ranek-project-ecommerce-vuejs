@@ -36,10 +36,15 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    async getUserProducts(context) {
-      const response = await api.get(`/product?${context.state.user.id}`);
-      context.commit("UPDATE_USER_PRODUCTS", response.data);
+    getUserProducts(context) {
+      api.get(`/product?user_id=${context.state.user.id}`).then((response) => {
+        context.commit("UPDATE_USER_PRODUCTS", response.data);
+      });
     },
+    // async getUserProducts(context) {
+    //   const response = await api.get(`/product?${context.state.user.id}`);
+    //   context.commit("UPDATE_USER_PRODUCTS", response.data);
+    // },
     getUser(context, payload) {
       return api.get(`/user/${payload}`).then((response) => {
         context.commit("UPDATE_USER", response.data);
